@@ -60,7 +60,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("Ground"))
         {
-            isGrounded = true;
+
+            // Check if player's Y position is above the ground's Y position
+            if (transform.position.y > other.bounds.center.y)
+            {
+                isGrounded = true;
+            }
         }
     }
 
