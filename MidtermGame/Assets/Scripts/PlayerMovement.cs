@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,18 +15,18 @@ public class PlayerMovement : MonoBehaviour
 
     // Start is called before the first frame update\
 
-    private void Awake()
-    {
-        // makes sure singleton player object doesnt destroy while loading
-        if(Instance == null) {
-            DontDestroyOnLoad(gameObject);
-            Instance = this;
-        }
-        // makes sure there's onle one singleton player object
-        else{
-            Destroy(gameObject);
-        }
-    }
+    // private void Awake()
+    // {
+    //     // makes sure singleton player object doesnt destroy while loading
+    //     if(Instance == null) {
+    //         DontDestroyOnLoad(gameObject);
+    //         Instance = this;
+    //     }
+    //     // makes sure there's onle one singleton player object
+    //     else{
+    //         Destroy(gameObject);
+    //     }
+    // }
 
     void Start()
     {
@@ -67,6 +68,11 @@ public class PlayerMovement : MonoBehaviour
                 isGrounded = true;
             }
         }
+        if(other.CompareTag("DeathBarrier"))
+        {
+            gameObject.SetActive(false);
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D other)
