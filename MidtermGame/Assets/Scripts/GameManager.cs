@@ -17,6 +17,12 @@ public class GameManager : MonoBehaviour
     public TMP_Text highScoreText;
     public TMP_Text finalScoreText;
 
+    //spawn layout 1
+    public GameObject[] layoutPrefabs;
+    public float spawnDistance = 24f;
+
+    private float lastSpawnYPosition = 0f;
+
     private void Awake()
     {
         // makes sure singleton player object doesnt destroy while loading
@@ -34,6 +40,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SpawnLayout();
+
         player = GameObject.FindGameObjectWithTag("Player");
         UpdateScoreText();
     }
@@ -47,6 +55,15 @@ public class GameManager : MonoBehaviour
             UpdateScoreText();
         }
         */
+        
+        if(player != null)
+        {
+        //spawn layout 2
+            if (player.transform.position.y > lastSpawnYPosition - spawnDistance)
+            {
+                 SpawnLayout();
+            }
+        }
 
         if(SceneManager.GetActiveScene().buildIndex == 2)
         {
@@ -70,14 +87,18 @@ public class GameManager : MonoBehaviour
             player = GameObject.FindGameObjectWithTag("Player");
         }
         
-        if (player.transform.position.y > score)
-        {
-            score = (int) player.transform.position.y;
-            UpdateScoreText();
-        }
+       
 
         if(player != null)
         {
+
+             
+            if (player.transform.position.y > score)
+            {
+                score = (int) player.transform.position.y;
+                UpdateScoreText();
+            }
+
             if(!player.activeSelf)
             {
                 if (score > highScore)
@@ -91,8 +112,8 @@ public class GameManager : MonoBehaviour
                 
             }
         }
-        
     }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         scoreText = GameObject.FindGameObjectWithTag("Score")?.GetComponent<TMP_Text>();
@@ -105,5 +126,17 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Score: " + score;
         highScoreText.text = "High Score: " + highScore;
         finalScoreText.text = "Final Score: " + finalScore;
+    }
+
+    //spawn layout 3
+    void SpawnLayout()
+    {
+        int randomIndex = Random.Range(0, layoutPrefabs.Length);
+
+        GameObject newLayout = Instantiate(layoutPrefabs[randomIndex]);
+
+        newLayout.transform.position = new Vector3(0f, lastSpawnYPosition + spawnDistance, 0f);
+
+        lastSpawnYPosition = newLayout.transform.position.y;
     }
 }
