@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         //spawn layout 2
             if (player.transform.position.y > lastSpawnYPosition - spawnDistance)
             {
-                 SpawnLayout();
+                SpawnLayout();
             }
         }
 
@@ -91,8 +91,6 @@ public class GameManager : MonoBehaviour
 
         if(player != null)
         {
-
-             
             if (player.transform.position.y > score)
             {
                 score = (int) player.transform.position.y;
@@ -119,6 +117,8 @@ public class GameManager : MonoBehaviour
         scoreText = GameObject.FindGameObjectWithTag("Score")?.GetComponent<TMP_Text>();
         highScoreText = GameObject.FindGameObjectWithTag("HighScore")?.GetComponent<TMP_Text>();
         finalScoreText = GameObject.FindGameObjectWithTag("FinalScore")?.GetComponent<TMP_Text>();
+
+        lastSpawnYPosition = 0f;
     }
 
     void UpdateScoreText()
@@ -131,12 +131,21 @@ public class GameManager : MonoBehaviour
     //spawn layout 3
     void SpawnLayout()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        return;
+        
         int randomIndex = Random.Range(0, layoutPrefabs.Length);
-
         GameObject newLayout = Instantiate(layoutPrefabs[randomIndex]);
 
-        newLayout.transform.position = new Vector3(0f, lastSpawnYPosition + spawnDistance, 0f);
-
+        if (lastSpawnYPosition == 0f)
+        {
+            newLayout.transform.position = new Vector3(0f, 7f, 0f);
+        }
+        else
+        {
+            newLayout.transform.position = new Vector3(0f, lastSpawnYPosition + spawnDistance, 0f);
+        }
+        
         lastSpawnYPosition = newLayout.transform.position.y;
     }
 }
